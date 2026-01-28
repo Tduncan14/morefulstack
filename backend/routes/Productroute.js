@@ -1,11 +1,12 @@
 import express from 'express'
+import mongoose from "mongoose"
 
 
 const router = express.Router()
 
 
 
-router.get("/products", async (req, res) => {
+router.get("/", async (req, res) => {
 
     try {
         const getAllproducts = await Product.find().sort({ created: - 1 })
@@ -27,7 +28,7 @@ router.get("/products", async (req, res) => {
 
 // update the router
 
-router.put("/products/api/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
 
     const { id } = req.params
 
@@ -58,7 +59,7 @@ router.put("/products/api/:id", async (req, res) => {
 })
 
 
-router.post("/products", async (req, res) => {
+router.post("/", async (req, res) => {
 
     const product = req.body
 
@@ -85,7 +86,7 @@ router.get("/", (req, res) => {
     res.send("Server is ready")
 })
 
-router.delete("/api/products/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
 
     const productId = req.params.id
 
