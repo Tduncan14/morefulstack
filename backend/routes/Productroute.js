@@ -34,11 +34,11 @@ router.put("/:id", async (req, res) => {
 
     const update = req.body
 
-    if (!id) {
-        res.status(404).json({
-            message: "Item is not found"
-        })
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ success: false, message: 'Invalid Product Id' })
     }
+
 
     try {
 
