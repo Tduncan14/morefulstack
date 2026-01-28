@@ -5,6 +5,7 @@ import { connectDB } from "./config/ConnectDB.js";
 import cors from "cors"
 import path from "path"
 import Product from "./models/ProductSchema.js";
+import ProductRoutes from "./routes/Productroute.js";
 
 dotenv.config()
 
@@ -18,6 +19,7 @@ const app = express();
 
 app.use(express.json())
 app.use(cors())
+app.use('/products', ProductRoutes)
 
 
 
@@ -26,86 +28,6 @@ app.use(cors())
 
 
 //  these are apis
-
-
-app.get("/products", async (req, res) => {
-
-    try {
-        const getAllproducts = await Product.find().sort({ created: - 1 })
-
-        res.status(200).json({
-            message: 'successfully grabbed all the products',
-            data: getAllproducts
-        })
-    }
-
-    catch (error) {
-        res.status(500).json({ message: 'there is an error with the database', error })
-    }
-
-
-
-})
-
-
-app.post("/products", async (req, res) => {
-
-    const product = req.body
-
-    if (!product.name || !product.price || !product.image) {
-        return res.status(400).json({ message: "feel out all the fields " })
-    }
-
-    const newProduct = new Product(product)
-
-
-    try {
-        await newProduct.save()
-        res.status(201).json({ success: true, data: newProduct })
-    }
-    catch (err) {
-        console.error("Error in create product", error.message)
-        res.status(500).json({ success: false, message: "Server error" })
-    }
-
-})
-
-app.get("/", (req, res) => {
-
-    res.send("Server is ready")
-})
-
-app.delete("/api/products/:id", async (req, res) => {
-
-    const productId = req.params.id
-
-    if (!req.params.id) {
-        res.status(404).json({
-            message: "the items does not exist"
-        })
-    }
-
-
-    try {
-        const deleteItem = await Product.findByIdAndDelete(productId);
-
-        res.status(200).json({
-            message: 'the product was successfuly deleted', deleteItem
-        })
-
-    }
-
-    catch (err) {
-        res.status(400).json({
-            message: 'the item was not successfully deleted',
-            err,
-        })
-
-    }
-
-
-
-})
 
 const PORT = process.env.PORT || 5000
 
