@@ -90,10 +90,10 @@ router.delete("/:id", async (req, res) => {
 
     const productId = req.params.id
 
-    if (!req.params.id) {
-        res.status(404).json({
-            message: "the items does not exist"
-        })
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            message: "Invalid ID"
+        });
     }
 
 
