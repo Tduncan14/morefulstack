@@ -1,46 +1,28 @@
-// const express = require("express");
 import express from "express";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+import path from "path";
+
 import { connectDB } from "./config/ConnectDB.js";
-import cors from "cors"
-import path from "path"
-import Product from "./models/ProductSchema.js";
-import ProductRoutes from "./routes/Productroute.js";
 
-dotenv.config()
+import productRoutes from "./routes/Productroute.js";
 
 
-connectDB()
 
-//mongodb + srv://treek:pokemon1@cluster0.zee7avz.mongodb.net/?appName=Cluster0
+dotenv.config();
+
 
 const app = express();
+const PORT = process.env.PORT || 5000;
+connectDB();
 
+const __dirname = path.resolve();
 
+app.use(express.json()); // allows us to accept JSON data in the req.body
 
-
-app.use(express.json())
-app.use(cors())
-app.use('/api/products', ProductRoutes)
-
-
-
-
-
-
-
-//  these are apis
-
-const PORT = process.env.PORT || 5000
-
-
-const __dirname = path.resolve()
+app.use("/api/products", productRoutes);
 
 if (process.env.NODE_ENV === "production") {
-    // Serve static assets
-    app.use(express.static(path.join(__dirname, "frontend", "disk")))
-
-    // Serve React index.html for all other routes
+    app.use(express.static(path.join(__dirname, "/frontend/dist")));
     app.get(/.*/, (req, res) => {
         res.sendFile(
             path.join(__dirname, "../frontend", "dist", "index.html")
@@ -48,6 +30,7 @@ if (process.env.NODE_ENV === "production") {
     })
 }
 
-app.listen(5000, () => {
-    console.log(`listening on the ${PORT}`)
-})
+
+app.listen(PORT, () => {
+    console.log("Server started at http://localhost:" + PORT);
+});
