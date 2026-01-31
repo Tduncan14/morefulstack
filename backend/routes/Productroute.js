@@ -1,5 +1,6 @@
 import express from 'express'
 import mongoose from "mongoose"
+import Product from '../models/ProductSchema.js'
 
 
 const router = express.Router()
